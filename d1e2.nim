@@ -1,8 +1,9 @@
-import std/[strformat, strutils]
+import std/[algorithm, strformat, strutils]
 
-proc readMyFile(): int =
+proc readMyFile(): seq[int] =
   var
     line: string
+    totals: seq[int]
     elfTmp = 0
 
   let f = open("d1e1.txt")
@@ -11,13 +12,14 @@ proc readMyFile(): int =
 
   while f.readLine(line):
     if line == "":
-      if elfTmp > result:
-        result = elfTmp
-
+      totals.add(elfTmp)
       elfTmp = 0
     else:
       elfTmp += line.parseInt()
 
+  totals
 
-var res: int = readMyFile() # will only read the first line
-echo &"Elf answer: {res}\n"
+
+var res: seq[int] = readMyFile()
+res.sort(Descending)
+echo &"Elf answer: {res[0] + res[1] + res[2]}\n"
